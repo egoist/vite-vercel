@@ -3,7 +3,7 @@ import { type Plugin } from "vite"
 import { Request, Response, Headers } from "undici"
 import { createRequest } from "./server-node"
 import * as esbuild from "esbuild"
-import fs from "fs"
+import fs from "fs-extra"
 
 export type Options = {
   middleware?: string
@@ -47,10 +47,13 @@ export const plugin = (options: Options = {}): Plugin => {
       })
     },
 
-    async buildEnd() {
+    async writeBundle({ dir }) {
       if (!middlewarePath) {
         return
       }
+
+      // Copy static file
+      await fs.copy(dir || "dist", ".vercel/output/static")
 
       await esbuild.build({
         entryPoints: [middlewarePath],
