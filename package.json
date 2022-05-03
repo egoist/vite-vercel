@@ -20,6 +20,7 @@
       "import": "./dist/server.mjs"
     }
   },
+  "repository": "github:egoist-labs/vite-vercel",
   "scripts": {
     "build-fast": "tsup",
     "build": "pnpm run build-fast -- --dts-resolve",
