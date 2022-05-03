@@ -3,13 +3,10 @@ import { type Plugin } from "vite"
 import { createRequest } from "./server-node"
 import * as esbuild from "esbuild"
 import fs from "fs-extra"
-import { fileURLToPath } from "url"
 
 export type Options = {
   middleware?: string
 }
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const writeJson = (filepath: string, data: any) => {
   fs.mkdirSync(path.dirname(filepath), { recursive: true })
