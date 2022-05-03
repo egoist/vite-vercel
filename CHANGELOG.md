@@ -2,6 +2,10 @@
 
 No unreleased changes.
 
+## 0.1.1
+
+No unreleased changes.
+
 ## 0.1.0
 
 - tweak
