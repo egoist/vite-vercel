@@ -21,6 +21,19 @@ export const plugin = (options: Options = {}): Plugin => {
   return {
     name: "vercel",
 
+    // @ts-expect-error
+    config() {
+      return {
+        ssr: {
+          // Not sure why Vite SSR can't handle these
+          // It throws something like
+          // ReferenceError: require is not defined
+          // at /node_modules/.pnpm/fetch-blob@3.1.5/node_modules/fetch-blob/streams.cjs:16:17
+          external: ["node-fetch", "@web-std/file"],
+        },
+      }
+    },
+
     configResolved(config) {
       middlewarePath =
         options.middleware && path.resolve(config.root, options.middleware)

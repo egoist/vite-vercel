@@ -9,7 +9,7 @@
     "dist",
     "/server.d.ts"
   ],
-  "types": "./dist/index.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.js",
