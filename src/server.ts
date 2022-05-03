@@ -1,9 +1,19 @@
+import { validateURL } from "./server-utils"
+
 export class MiddlewareResponse extends Response {
+  static rewrite(destination: string | URL) {
+    return new MiddlewareResponse(null, {
+      headers: {
+        "x-middleware-rewrite": validateURL(destination),
+      },
+    })
+  }
+
   static next() {
-    const response = new Response()
-
-    response.headers.set("x-middleware-next", "1")
-
-    return response
+    return new MiddlewareResponse(null, {
+      headers: {
+        "x-middleware-next": "1",
+      },
+    })
   }
 }
