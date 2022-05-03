@@ -19,14 +19,21 @@
     "build-fast": "tsup src/index.ts --format cjs,esm",
     "build": "pnpm run build-fast -- --dts-resolve",
     "test": "vitest run",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "build-example": "vite build"
   },
   "license": "MIT",
   "devDependencies": {
     "@egoist/prettier-config": "1.0.0",
-    "prettier": "2.5.1",
-    "tsup": "5.11.13",
-    "typescript": "4.5.4",
-    "vitest": "0.2.5"
+    "@types/node": "^17.0.31",
+    "prettier": "2.6.2",
+    "tsup": "5.12.6",
+    "typescript": "4.6.4",
+    "vite": "^2.9.7",
+    "vitest": "0.10.1"
+  },
+  "dependencies": {
+    "esbuild": "^0.14.38",
+    "undici": "^5.1.1"
   }
 }

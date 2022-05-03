@@ -1,1 +1,3 @@
-export const foo = 'foo'
+import { plugin } from "./plugin"
+
+export default plugin
