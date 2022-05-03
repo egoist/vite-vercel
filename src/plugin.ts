@@ -1,17 +1,16 @@
 import path from "path"
 import { type Plugin } from "vite"
-import { Request, Response, Headers } from "undici"
+import { type Response } from "undici"
 import { createRequest } from "./server-node"
 import * as esbuild from "esbuild"
 import fs from "fs-extra"
+import { fileURLToPath } from "url"
 
 export type Options = {
   middleware?: string
 }
 
-globalThis.Request = globalThis.Request || Request
-globalThis.Response = globalThis.Response || Response
-globalThis.Headers = globalThis.Headers || Headers
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const writeJson = (filepath: string, data: any) => {
   fs.mkdirSync(path.dirname(filepath), { recursive: true })
@@ -48,25 +47,24 @@ export const plugin = (options: Options = {}): Plugin => {
     },
 
     async writeBundle({ dir }) {
-      if (!middlewarePath) {
-        return
-      }
-
       // Copy static file
       await fs.copy(dir || "dist", ".vercel/output/static")
 
-      await esbuild.build({
-        entryPoints: [middlewarePath],
-        bundle: true,
-        platform: "neutral",
-        outfile: `.vercel/output/functions/main.func/index.js`,
-        format: "esm",
-      })
+      if (middlewarePath) {
+        await esbuild.build({
+          entryPoints: [middlewarePath],
+          bundle: true,
+          platform: "node",
+          target: "node14",
+          outfile: `.vercel/output/functions/main.func/index.js`,
+          format: "esm",
+        })
 
-      writeJson(".vercel/output/functions/main.func/.vc-config.json", {
-        runtime: "edge",
-        entrypoint: "index.js",
-      })
+        writeJson(".vercel/output/functions/main.func/.vc-config.json", {
+          runtime: "edge",
+          entrypoint: "index.js",
+        })
+      }
 
       writeJson(".vercel/output/config.json", {
         version: 3,
@@ -80,9 +78,13 @@ export const plugin = (options: Options = {}): Plugin => {
           {
             handle: "filesystem",
           },
-          { src: "/.*", middlewarePath: "main", continue: true },
+          middlewarePath && {
+            src: "/.*",
+            middlewarePath: "main",
+            continue: true,
+          },
           { src: "/.*", dest: "/index.html" },
-        ],
+        ].filter(Boolean),
       })
     },
   }

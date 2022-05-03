@@ -1,4 +1,4 @@
-import { MiddlewareResponse } from "./src/server-runtime"
+import { MiddlewareResponse } from "./src/server"
 
 export default (req: Request) => {
   const url = new URL(req.url)

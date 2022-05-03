@@ -2,28 +2,48 @@
 
 ---
 
-# my-ts-lib
+# vite-vercel
 
-[![npm version](https://badgen.net/npm/v/my-ts-lib)](https://npm.im/my-ts-lib) [![npm downloads](https://badgen.net/npm/dm/my-ts-lib)](https://npm.im/my-ts-lib)
-
-## Using this template
-
-- Search `my-ts-lib` and replace it with your custom package name.
-- Search `egoist` and replace it with your name.
-
-Features:
-
-- Package manager [pnpm](https://pnpm.js.org/), safe and fast
-- Release with [semantic-release](https://npm.im/semantic-release)
-- Bundle with [tsup](https://github.com/egoist/tsup)
-- Test with [vitest](https://vitest.dev)
-
-To skip CI (GitHub action), add `skip-ci` to commit message. To skip release, add `skip-release` to commit message.
+[![npm version](https://badgen.net/npm/v/vite-vercel)](https://npm.im/vite-vercel) [![npm downloads](https://badgen.net/npm/dm/vite-vercel)](https://npm.im/vite-vercel)
 
 ## Install
 
 ```bash
-npm i my-ts-lib
+npm i vite-vercel
+```
+
+## Usage
+
+In your `vite.config.ts`:
+
+```ts
+import { defineConfig } from "vite"
+import vercel from "vite-vercel"
+
+export default defineConfig({
+  plugins: [
+    vercel({
+      middleware: "./middleware.ts",
+    }),
+  ],
+})
+```
+
+Creating a `middleware.ts`:
+
+```ts
+import { MiddlewareResponse } from "vite-vercel/server"
+
+export default (req: Request) => {
+  const url = new URL(req.url)
+
+  if (url.pathname === "/from-middleware") {
+    return new Response("from middleware")
+  }
+
+  // Continue serving `index.html`
+  return MiddlewareResponse.next()
+}
 ```
 
 ## Sponsors

@@ -1,22 +1,27 @@
 {
-  "name": "my-ts-lib",
+  "name": "vite-vercel",
   "version": "0.0.0",
-  "description": "My awesome typescript library",
+  "description": "Adding Vercel middleware support to your Vite project",
   "publishConfig": {
     "access": "public"
   },
   "files": [
     "dist"
   ],
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
   "exports": {
-    "require": "./dist/index.js",
-    "import": "./dist/index.mjs"
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./server": {
+      "require": "./dist/server.js",
+      "import": "./dist/server.mjs",
+      "types": "./dist/server.d.ts"
+    }
   },
-  "types": "./dist/index.d.ts",
   "scripts": {
-    "build-fast": "tsup src/index.ts --format cjs,esm",
+    "build-fast": "tsup",
     "build": "pnpm run build-fast -- --dts-resolve",
     "test": "vitest run",
     "prepublishOnly": "pnpm run build",
@@ -34,6 +39,7 @@
     "vitest": "0.10.1"
   },
   "dependencies": {
+    "@web-std/file": "^3.0.2",
     "esbuild": "^0.14.38",
     "fs-extra": "^10.1.0",
     "undici": "^5.1.1"
