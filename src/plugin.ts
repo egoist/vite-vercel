@@ -1,7 +1,7 @@
 import path from "path"
 import { type Plugin } from "vite"
 import { Request, Response, Headers } from "undici"
-import { createRequest } from "./server"
+import { createRequest } from "./server-node"
 import * as esbuild from "esbuild"
 import fs from "fs"
 
@@ -31,10 +31,17 @@ export const plugin = (options: Options = {}): Plugin => {
     configureServer(server) {
       if (!middlewarePath) return
 
-      server.middlewares.use(async (req, res) => {
+      server.middlewares.use(async (req, res, next) => {
+        await server.ssrLoadModule(path.join(__dirname, "server-prepare"))
+
         const middleware = await server.ssrLoadModule(`/@fs${middlewarePath}`)
         const request = createRequest(req)
         const response: Response = await middleware.default(request)
+
+        if (response.headers.get("x-middleware-next") === "1") {
+          return next()
+        }
+
         const ab = await response.arrayBuffer()
         res.end(Buffer.from(ab))
       })

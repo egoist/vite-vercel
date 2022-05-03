@@ -1,5 +1,11 @@
+import { MiddlewareResponse } from "./src/server-runtime"
+
 export default (req: Request) => {
-  // @ts-expect-error
-  console.log(globalThis.NextResponse)
+  const url = new URL(req.url)
+
+  if (url.pathname === "/") {
+    return MiddlewareResponse.next()
+  }
+
   return new Response("hello from middleware: " + req.url)
 }
