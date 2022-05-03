@@ -76,7 +76,6 @@ export const plugin = (options: Options = {}): Plugin => {
               "cache-control": "public, immutable, max-age=31536000",
             },
           },
-          ,
           {
             handle: "filesystem",
           },
