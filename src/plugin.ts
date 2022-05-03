@@ -93,6 +93,7 @@ export const plugin = (options: Options = {}): Plugin => {
 
       if (middlewarePath) {
         await build({
+          publicDir: false,
           build: {
             ssr: true,
             polyfillDynamicImport: false,
