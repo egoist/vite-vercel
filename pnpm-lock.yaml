@@ -1,15 +1,15 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 specifiers:
   '@egoist/prettier-config': 1.0.0
-  prettier: 2.5.1
+  prettier: 2.6.2
   tsup: 5.11.13
   typescript: 4.5.4
   vitest: 0.2.5
 
 devDependencies:
   '@egoist/prettier-config': 1.0.0
-  prettier: 2.5.1
+  prettier: 2.6.2
   tsup: 5.11.13_typescript@4.5.4
   typescript: 4.5.4
   vitest: 0.2.5
@@ -961,8 +961,8 @@ packages:
       source-map-js: 1.0.1
     dev: true
 
-  /prettier/2.5.1:
-    resolution: {integrity: sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==}
+  /prettier/2.6.2:
+    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
