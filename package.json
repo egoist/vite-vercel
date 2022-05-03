@@ -43,5 +43,8 @@
     "@web-std/file": "^3.0.2",
     "fs-extra": "^10.1.0",
     "node-fetch": "^3.2.4"
+  },
+  "peerDependencies": {
+    "vite": "^2"
   }
 }
