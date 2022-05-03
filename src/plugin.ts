@@ -74,9 +74,7 @@ export const plugin = (options: Options = {}): Plugin => {
             src: "/(.*)",
             middlewarePath: "main",
             continue: true,
-          },
-          {
-            handle: "filesystem",
+            dest: "/index.html",
           },
         ],
       })
