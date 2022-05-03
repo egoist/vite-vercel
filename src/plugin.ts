@@ -1,6 +1,5 @@
 import path from "path"
 import { type Plugin } from "vite"
-import { createRequest } from "./server-node"
 import * as esbuild from "esbuild"
 import fs from "fs-extra"
 
@@ -39,12 +38,24 @@ export const plugin = (options: Options = {}): Plugin => {
     configureServer(server) {
       if (!middlewarePath) return
 
-      server.middlewares.use(async (req, res, next) => {
-        try {
-          await server.ssrLoadModule(path.join(__dirname, "server-prepare"))
+      let serverNode: typeof import("./server-node") | undefined
 
+      server.middlewares.use(async (req, res, next) => {
+        if (serverNode) return next()
+
+        await server.ssrLoadModule(path.join(__dirname, "server-prepare"))
+        serverNode = (await server.ssrLoadModule(
+          path.join(__dirname, "server-node"),
+        )) as any
+        next()
+      })
+
+      server.middlewares.use(async (req, res, next) => {
+        if (!serverNode) return next()
+
+        try {
           const middleware = await server.ssrLoadModule(`/@fs${middlewarePath}`)
-          const request = createRequest(req)
+          const request = serverNode.createRequest(req)
           let response: Response = await middleware.default(request)
 
           if (response.headers.get("x-middleware-next") === "1") {
@@ -65,6 +76,9 @@ export const plugin = (options: Options = {}): Plugin => {
           const ab = await response.arrayBuffer()
           res.end(Buffer.from(ab))
         } catch (error) {
+          if (error instanceof Error) {
+            server.ssrFixStacktrace(error)
+          }
           next(error)
         }
       })
