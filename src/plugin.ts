@@ -1,6 +1,5 @@
 import path from "path"
 import { type Plugin } from "vite"
-import { type Response } from "undici"
 import { createRequest } from "./server-node"
 import * as esbuild from "esbuild"
 import fs from "fs-extra"
