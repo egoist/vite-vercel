@@ -1,6 +1,5 @@
 import path from "path"
-import { type Plugin } from "vite"
-import * as esbuild from "esbuild"
+import { type Plugin, build } from "vite"
 import fs from "fs-extra"
 
 export type Options = {
@@ -36,7 +35,7 @@ export const plugin = (options: Options = {}): Plugin => {
     },
 
     configureServer(server) {
-      if (!middlewarePath) return
+      if (!middlewarePath || process.env.VITE_VERCEL_BUILD) return
 
       let serverNode: typeof import("./server-node") | undefined
 
@@ -85,17 +84,29 @@ export const plugin = (options: Options = {}): Plugin => {
     },
 
     async writeBundle({ dir }) {
+      if (process.env.VITE_VERCEL_BUILD) return
+
+      process.env.VITE_VERCEL_BUILD = "1"
+
       // Copy static file
       await fs.copy(dir || "dist", ".vercel/output/static")
 
       if (middlewarePath) {
-        await esbuild.build({
-          entryPoints: [middlewarePath],
-          bundle: true,
-          platform: "node",
-          target: "node14",
-          outfile: `.vercel/output/functions/main.func/index.js`,
-          format: "esm",
+        await build({
+          build: {
+            ssr: true,
+            polyfillDynamicImport: false,
+            rollupOptions: {
+              input: {
+                index: middlewarePath,
+              },
+              output: {
+                format: "esm",
+              },
+              preserveEntrySignatures: "strict",
+            },
+            outDir: `.vercel/output/functions/main.func`,
+          },
         })
 
         writeJson(".vercel/output/functions/main.func/.vc-config.json", {
