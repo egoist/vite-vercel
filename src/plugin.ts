@@ -69,7 +69,19 @@ export const plugin = (options: Options = {}): Plugin => {
       })
 
       writeJson(".vercel/output/config.json", {
-        routes: [{ src: "/(.*)", dest: "/index.html", middlewarePath: "main" }],
+        routes: [
+          {
+            src: `/assets/.+`,
+            headers: {
+              "cache-control": "public, immutable, max-age=31536000",
+            },
+          },
+          ,
+          {
+            handle: "filesystem",
+          },
+          { src: "/.*", middlewarePath: "main" },
+        ],
       })
     },
   }
