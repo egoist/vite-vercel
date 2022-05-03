@@ -6,6 +6,8 @@
 
 [![npm version](https://badgen.net/npm/v/vite-vercel)](https://npm.im/vite-vercel) [![npm downloads](https://badgen.net/npm/dm/vite-vercel)](https://npm.im/vite-vercel)
 
+> Adding a middleware powered by [Vercel Edge Function](https://vercel.com/features/edge-functions) to your existing Vite project.
+
 ## Install
 
 ```bash
@@ -39,6 +41,13 @@ export default (req: Request) => {
 
   if (url.pathname === "/from-middleware") {
     return new Response("from middleware")
+  }
+
+  // Rewrite to another URL
+  if (url.pathname === "/todo") {
+    return MiddlewareResponse.rewrite(
+      "https://jsonplaceholder.typicode.com/todos/1",
+    )
   }
 
   // Continue serving `index.html`
