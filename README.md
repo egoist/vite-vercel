@@ -9,7 +9,7 @@
 ## Install
 
 ```bash
-npm i vite-vercel
+npm i vite-vercel -D
 ```
 
 ## Usage
@@ -45,6 +45,10 @@ export default (req: Request) => {
   return MiddlewareResponse.next()
 }
 ```
+
+## Deploy on Vercel
+
+This plugin uses Vercel's [Build Output API (v3)](https://vercel.com/docs/build-output-api/v3) which requires an Environment Variable named `ENABLE_VC_BUILD` to be set to `1` in order to enable the feature.
 
 ## Sponsors
 
