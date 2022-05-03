@@ -69,6 +69,7 @@ export const plugin = (options: Options = {}): Plugin => {
       })
 
       writeJson(".vercel/output/config.json", {
+        version: 3,
         routes: [
           {
             src: `/assets/.+`,
