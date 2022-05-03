@@ -7,5 +7,11 @@ export default (req: Request) => {
     return new Response("hello from middleware: " + req.url)
   }
 
+  if (url.pathname === "/todo") {
+    return MiddlewareResponse.rewrite(
+      "https://jsonplaceholder.typicode.com/todos/1",
+    )
+  }
+
   return MiddlewareResponse.next()
 }

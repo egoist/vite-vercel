@@ -40,18 +40,33 @@ export const plugin = (options: Options = {}): Plugin => {
       if (!middlewarePath) return
 
       server.middlewares.use(async (req, res, next) => {
-        await server.ssrLoadModule(path.join(__dirname, "server-prepare"))
+        try {
+          await server.ssrLoadModule(path.join(__dirname, "server-prepare"))
 
-        const middleware = await server.ssrLoadModule(`/@fs${middlewarePath}`)
-        const request = createRequest(req)
-        const response: Response = await middleware.default(request)
+          const middleware = await server.ssrLoadModule(`/@fs${middlewarePath}`)
+          const request = createRequest(req)
+          let response: Response = await middleware.default(request)
 
-        if (response.headers.get("x-middleware-next") === "1") {
-          return next()
+          if (response.headers.get("x-middleware-next") === "1") {
+            return next()
+          }
+
+          const rewriteTo = response.headers.get("x-middleware-rewrite")
+          if (rewriteTo) {
+            response = await fetch(rewriteTo)
+          }
+
+          response.headers.forEach((value, key) => {
+            if (key !== "content-encoding" && value !== undefined) {
+              res.setHeader(key, value)
+            }
+          })
+
+          const ab = await response.arrayBuffer()
+          res.end(Buffer.from(ab))
+        } catch (error) {
+          next(error)
         }
-
-        const ab = await response.arrayBuffer()
-        res.end(Buffer.from(ab))
       })
     },
 
