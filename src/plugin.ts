@@ -80,7 +80,7 @@ export const plugin = (options: Options = {}): Plugin => {
           {
             handle: "filesystem",
           },
-          { src: "/.*", middlewarePath: "main" },
+          { src: "/.*", middlewarePath: "main", continue: true },
           { src: "/.*", dest: "/index.html" },
         ],
       })
