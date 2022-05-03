@@ -1,4 +1,4 @@
-import { Request, Response, Headers, fetch, FormData } from "undici"
+import fetch, { Request, Response, Headers, FormData } from "node-fetch"
 import { Blob as NodeBlob, File as NodeFile } from "@web-std/file"
 
 globalThis.Request = globalThis.Request || Request
