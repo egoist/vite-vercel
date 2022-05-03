@@ -1,4 +1,5 @@
 import type { IncomingMessage } from "http"
+import { MiddlewareRequest } from "./server"
 
 function createHeaders(requestHeaders: Record<string, any>): Headers {
   let headers = new Headers()
@@ -33,5 +34,5 @@ export function createRequest(req: IncomingMessage): Request {
     init.body = req
   }
 
-  return new Request(url.href, init)
+  return new MiddlewareRequest(url.href, init)
 }

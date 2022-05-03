@@ -34,9 +34,9 @@ export default defineConfig({
 Creating a `middleware.ts`:
 
 ```ts
-import { MiddlewareResponse } from "vite-vercel/server"
+import { MiddlewareRequest, MiddlewareResponse } from "vite-vercel/server"
 
-export default (req: Request) => {
+export default (req: MiddlewareRequest) => {
   const url = new URL(req.url)
 
   if (url.pathname === "/from-middleware") {

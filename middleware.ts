@@ -1,6 +1,6 @@
-import { MiddlewareResponse } from "./src/server"
+import { MiddlewareRequest, MiddlewareResponse } from "./src/server"
 
-export default (req: Request) => {
+export default (req: MiddlewareRequest) => {
   const url = new URL(req.url)
 
   if (url.pathname === "/from-middleware") {
