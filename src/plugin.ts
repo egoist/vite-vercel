@@ -75,6 +75,9 @@ export const plugin = (options: Options = {}): Plugin => {
             middlewarePath: "main",
             continue: true,
           },
+          {
+            handle: "filesystem",
+          },
         ],
       })
     },
