@@ -1,0 +1,29 @@
+{
+  "name": "vercel-utils",
+  "version": "0.0.0",
+  "description": "Some utils to work with vercel edge function and serverless function",
+  "scripts": {
+    "prepublishOnly": "pnpm build",
+    "build": "tsup src/*.ts --dts --format esm,cjs --no-shims",
+    "dev": "pnpm build --watch"
+  },
+  "files": [
+    "dist",
+    "/*.d.ts"
+  ],
+  "repository": "github:egoist-labs/vite-vercel",
+  "exports": {
+    "./server": {
+      "import": "./dist/server.mjs",
+      "default": "./dist/server.js"
+    },
+    "./server-node": {
+      "import": "./dist/server-node.mjs",
+      "default": "./dist/server-node.js"
+    }
+  },
+  "devDependencies": {
+    "tsup": "5.12.6"
+  },
+  "license": "MIT"
+}

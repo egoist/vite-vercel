@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "name": "example",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "2.9.7",
+    "vite-vercel": "workspace:*"
+  }
+}

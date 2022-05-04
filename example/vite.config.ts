@@ -1,5 +1,5 @@
 import { defineConfig } from "vite"
-import vercel from "./src"
+import vercel from "vite-vercel"
 
 export default defineConfig({
   plugins: [
@@ -7,7 +7,4 @@ export default defineConfig({
       middleware: "./middleware.ts",
     }),
   ],
-  build: {
-    outDir: "./example-dist",
-  },
 })

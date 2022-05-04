@@ -1,4 +1,4 @@
-import { MiddlewareRequest, MiddlewareResponse } from "./src/server"
+import { MiddlewareRequest, MiddlewareResponse } from "vite-vercel/server"
 
 export default (req: MiddlewareRequest) => {
   const url = new URL(req.url)

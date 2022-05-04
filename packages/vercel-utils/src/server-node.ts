@@ -1,6 +1,9 @@
 import type { IncomingMessage } from "http"
 import { MiddlewareRequest } from "./server"
 
+/**
+ * Create Web Headers from Node Headers
+ */
 function createHeaders(requestHeaders: Record<string, any>): Headers {
   let headers = new Headers()
   for (let key in requestHeaders) {
@@ -18,6 +21,9 @@ function createHeaders(requestHeaders: Record<string, any>): Headers {
   return headers
 }
 
+/**
+ * Create Web Request from Node Incoming Message
+ */
 export function createRequest(req: IncomingMessage): Request {
   let host = req.headers["x-forwarded-host"] || req.headers["host"]
   // doesn't seem to be available on their req object!

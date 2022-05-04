@@ -37,7 +37,7 @@ export const plugin = (options: Options = {}): Plugin => {
     configureServer(server) {
       if (!middlewarePath || process.env.VITE_VERCEL_BUILD) return
 
-      let serverNode: typeof import("./server-node") | undefined
+      let serverNode: typeof import("vercel-utils/server-node") | undefined
 
       server.middlewares.use(async (req, res, next) => {
         if (serverNode) return next()
