@@ -3,7 +3,8 @@
   "name": "vite-vercel-workspace",
   "scripts": {
     "build": "turbo run build",
-    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public"
+    "release": "bumpp package.json packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "bumpp": "^7.1.1",
