@@ -43,9 +43,9 @@ export const plugin = (options: Options = {}): Plugin => {
       server.middlewares.use(async (req, res, next) => {
         if (serverNode) return next()
 
-        await server.ssrLoadModule(path.join(__dirname, "server-prepare"))
+        await server.ssrLoadModule(`/@id/vite-vercel/server-prepare`)
         serverNode = (await server.ssrLoadModule(
-          path.join(__dirname, "server-node"),
+          `/@id/vite-vercel/server-node`,
         )) as any
         next()
       })
