@@ -4,7 +4,7 @@
   "description": "Some utils to work with vercel edge function and serverless function",
   "scripts": {
     "prepublishOnly": "pnpm build",
-    "build": "tsup src/*.ts --dts --format esm,cjs --no-shims",
+    "build": "tsup src/*.ts --dts-resolve --format esm,cjs --no-shims",
     "dev": "pnpm build --watch"
   },
   "files": [

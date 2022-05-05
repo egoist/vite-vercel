@@ -1,5 +1,6 @@
 import type { IncomingMessage } from "http"
 import { Readable } from "stream"
+import { Request } from "next/dist/server/web/spec-compliant/request"
 import { MiddlewareFetchEvent, MiddlewareRequest } from "./server"
 
 /**
@@ -47,6 +48,8 @@ export function createRequest(req: IncomingMessage): Request {
 export function createFetchEvent(request: Request): MiddlewareFetchEvent {
   return new MiddlewareFetchEvent(request)
 }
+
+export { MiddlewareFetchEvent }
 
 export function bodyStreamToNodeStream(bodyStream: ReadableStream): Readable {
   const reader = bodyStream.getReader()
