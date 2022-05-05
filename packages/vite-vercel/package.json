@@ -40,6 +40,7 @@
     "vitest": "0.10.1"
   },
   "dependencies": {
+    "@vercel/nft": "^0.18.2",
     "@web-std/file": "^3.0.2",
     "fs-extra": "^10.1.0",
     "node-fetch": "^3.2.4",

@@ -1,6 +1,7 @@
 import path from "path"
 import { type Plugin, build } from "vite"
 import fs from "fs-extra"
+import { nodeFileTrace } from "@vercel/nft"
 
 export type Options = {
   middleware?: string
@@ -109,6 +110,19 @@ export const plugin = (options: Options = {}): Plugin => {
             outDir: `.vercel/output/functions/main.func`,
           },
         })
+
+        const { fileList } = await nodeFileTrace([
+          `.vercel/output/functions/main.func/index.js`,
+        ])
+
+        for (const filename of fileList) {
+          if (filename.includes("node_modules")) {
+            await fs.copy(
+              filename,
+              `.vercel/output/functions/main.func/${filename}`,
+            )
+          }
+        }
 
         writeJson(".vercel/output/functions/main.func/.vc-config.json", {
           runtime: "edge",
