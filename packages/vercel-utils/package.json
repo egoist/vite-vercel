@@ -1,6 +1,6 @@
 {
   "name": "vercel-utils",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Some utils to work with vercel edge function and serverless function",
   "scripts": {
     "prepublishOnly": "pnpm build",
