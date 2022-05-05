@@ -1,9 +1,22 @@
 import path from "path"
 import { type Plugin, build } from "vite"
 import fs from "fs-extra"
+import resolveFrom from "resolve-from"
+import { fileURLToPath } from "url"
 
 export type Options = {
   middleware?: string
+}
+
+declare const TSUP_FORMAT: string
+
+const resolve = (id: string) => {
+  return resolveFrom(
+    TSUP_FORMAT === "esm"
+      ? path.dirname(fileURLToPath(import.meta.url))
+      : __dirname,
+    id,
+  )
 }
 
 const writeJson = (filepath: string, data: any) => {
@@ -16,7 +29,6 @@ export const plugin = (options: Options = {}): Plugin => {
   return {
     name: "vercel",
 
-    // @ts-expect-error
     config() {
       return {
         ssr: {
@@ -27,6 +39,11 @@ export const plugin = (options: Options = {}): Plugin => {
           external: ["node-fetch", "@web-std/file"],
           // No sure why sometimes this is externalized
           noExternal: [/vite-vercel/],
+        },
+        resolve: {
+          alias: {
+            "vercel-utils": path.dirname(resolve("vercel-utils/polyfills")),
+          },
         },
       }
     },
@@ -44,9 +61,9 @@ export const plugin = (options: Options = {}): Plugin => {
       server.middlewares.use(async (req, res, next) => {
         if (serverNode) return next()
 
-        await server.ssrLoadModule(`/@id/vite-vercel/server-prepare`)
+        await server.ssrLoadModule("vercel-utils/polyfills")
         serverNode = (await server.ssrLoadModule(
-          `/@id/vite-vercel/server-node`,
+          "vercel-utils/server-node",
         )) as any
         next()
       })
@@ -57,7 +74,8 @@ export const plugin = (options: Options = {}): Plugin => {
         try {
           const middleware = await server.ssrLoadModule(`/@fs${middlewarePath}`)
           const request = serverNode.createRequest(req)
-          let response: Response = await middleware.default(request)
+          const event = serverNode.createFetchEvent(request)
+          let response: Response = await middleware.default(request, event)
 
           if (response.headers.get("x-middleware-next") === "1") {
             return next()
@@ -74,8 +92,8 @@ export const plugin = (options: Options = {}): Plugin => {
             }
           })
 
-          const ab = await response.arrayBuffer()
-          res.end(Buffer.from(ab))
+          const stream = serverNode.bodyStreamToNodeStream(response.body!)
+          stream.pipe(res)
         } catch (error) {
           if (error instanceof Error) {
             server.ssrFixStacktrace(error)
@@ -109,6 +127,7 @@ export const plugin = (options: Options = {}): Plugin => {
               preserveEntrySignatures: "strict",
             },
             outDir: `.vercel/output/functions/main.func`,
+            target: "esnext",
           },
         })
 

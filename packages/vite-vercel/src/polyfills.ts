@@ -1,0 +1,1 @@
+import "vercel-utils/polyfills"

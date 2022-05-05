@@ -1,6 +1,10 @@
-import { MiddlewareRequest, MiddlewareResponse } from "vite-vercel/server"
+import {
+  MiddlewareRequest,
+  MiddlewareResponse,
+  MiddlewareFetchEvent,
+} from "vite-vercel/server"
 
-export default (req: MiddlewareRequest) => {
+export default (req: MiddlewareRequest, event: MiddlewareFetchEvent) => {
   const url = new URL(req.url)
 
   if (url.pathname === "/from-middleware") {
@@ -11,6 +15,22 @@ export default (req: MiddlewareRequest) => {
     return MiddlewareResponse.rewrite(
       "https://jsonplaceholder.typicode.com/todos/1",
     )
+  }
+
+  if (url.pathname === "/stream") {
+    const { readable, writable } = new TransformStream()
+
+    event.waitUntil(
+      (async () => {
+        const writer = writable.getWriter()
+        const encoder = new TextEncoder()
+        writer.write(encoder.encode("Hello, world! Streamed!"))
+        writer.write(encoder.encode("response"))
+        writer.close()
+      })(),
+    )
+
+    return new Response(readable)
   }
 
   return MiddlewareResponse.next()

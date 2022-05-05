@@ -59,6 +59,10 @@ export default (req: MiddlewareRequest) => {
 
 This plugin uses Vercel's [Build Output API (v3)](https://vercel.com/docs/build-output-api/v3) which requires an Environment Variable named `ENABLE_VC_BUILD` to be set to `1` in order to enable the feature.
 
+## Credits
+
+A lot of code are taken from Next.js since it's basically the same logic, all credits to Next.js authors.
+
 ## Sponsors
 
 [![sponsors](https://sponsors-images.egoist.sh/sponsors.svg)](https://github.com/sponsors/egoist)

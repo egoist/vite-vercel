@@ -20,10 +20,20 @@
     "./server-node": {
       "import": "./dist/server-node.mjs",
       "default": "./dist/server-node.js"
+    },
+    "./polyfills": {
+      "import": "./dist/polyfills.mjs",
+      "default": "./dist/polyfills.js"
     }
   },
   "devDependencies": {
+    "next": "^12.1.6",
     "tsup": "5.12.6"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@web-std/file": "^3.0.2",
+    "node-fetch": "^3.2.4",
+    "web-streams-polyfill": "^3.2.1"
+  }
 }

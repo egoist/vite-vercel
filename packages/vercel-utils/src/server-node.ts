@@ -1,5 +1,6 @@
 import type { IncomingMessage } from "http"
-import { MiddlewareRequest } from "./server"
+import { Readable } from "stream"
+import { MiddlewareFetchEvent, MiddlewareRequest } from "./server"
 
 /**
  * Create Web Headers from Node Headers
@@ -41,4 +42,23 @@ export function createRequest(req: IncomingMessage): Request {
   }
 
   return new MiddlewareRequest(url.href, init)
+}
+
+export function createFetchEvent(request: Request): MiddlewareFetchEvent {
+  return new MiddlewareFetchEvent(request)
+}
+
+export function bodyStreamToNodeStream(bodyStream: ReadableStream): Readable {
+  const reader = bodyStream.getReader()
+  return Readable.from(
+    (async function* () {
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) {
+          return
+        }
+        yield value
+      }
+    })(),
+  )
 }

@@ -1,5 +1,9 @@
-import fetch, { Request, Response, Headers, FormData } from "node-fetch"
+import "web-streams-polyfill/es2018"
+import fetch, { FormData } from "node-fetch"
 import { Blob as NodeBlob, File as NodeFile } from "@web-std/file"
+import { Response } from "next/dist/server/web/spec-compliant/response"
+import { Request } from "next/dist/server/web/spec-compliant/request"
+import { Headers } from "next/dist/server/web/spec-compliant/headers"
 
 globalThis.Request = globalThis.Request || Request
 globalThis.Response = globalThis.Response || Response
