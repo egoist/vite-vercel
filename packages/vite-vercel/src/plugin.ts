@@ -1,7 +1,6 @@
 import path from "path"
 import { type Plugin, build } from "vite"
 import fs from "fs-extra"
-import { nodeFileTrace } from "@vercel/nft"
 
 export type Options = {
   middleware?: string
@@ -26,6 +25,8 @@ export const plugin = (options: Options = {}): Plugin => {
           // ReferenceError: require is not defined
           // at /node_modules/.pnpm/fetch-blob@3.1.5/node_modules/fetch-blob/streams.cjs:16:17
           external: ["node-fetch", "@web-std/file"],
+          // No sure why sometimes this is externalized
+          noExternal: [/vite-vercel/],
         },
       }
     },
@@ -110,19 +111,6 @@ export const plugin = (options: Options = {}): Plugin => {
             outDir: `.vercel/output/functions/main.func`,
           },
         })
-
-        const { fileList } = await nodeFileTrace([
-          `.vercel/output/functions/main.func/index.js`,
-        ])
-
-        for (const filename of fileList) {
-          if (filename.includes("node_modules")) {
-            await fs.copy(
-              filename,
-              `.vercel/output/functions/main.func/${filename}`,
-            )
-          }
-        }
 
         writeJson(".vercel/output/functions/main.func/.vc-config.json", {
           runtime: "edge",
