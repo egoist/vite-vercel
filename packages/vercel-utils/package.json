@@ -27,7 +27,7 @@
     }
   },
   "devDependencies": {
-    "next": "^12.1.6",
+    "next": "12.1.6",
     "tsup": "5.12.6"
   },
   "license": "MIT",
