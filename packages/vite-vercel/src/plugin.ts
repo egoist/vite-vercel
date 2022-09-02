@@ -116,7 +116,6 @@ export const plugin = (options: Options = {}): Plugin => {
           publicDir: false,
           build: {
             ssr: true,
-            polyfillDynamicImport: false,
             rollupOptions: {
               input: {
                 index: middlewarePath,
