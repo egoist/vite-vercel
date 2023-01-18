@@ -45,6 +45,6 @@
     "vercel-utils": "workspace:*"
   },
   "peerDependencies": {
-    "vite": "^2 || ^3"
+    "vite": "^3 || ^4"
   }
 }
