@@ -72,7 +72,9 @@ export const plugin = (options: Options = {}): Plugin => {
         if (!serverNode) return next()
 
         try {
-          const middleware = await server.ssrLoadModule(`/@fs${middlewarePath}`)
+          const middleware = await server.ssrLoadModule(
+            `/@fs${middlewarePath?.replace(/^[\\/]?/, "/")}`,
+          )
           const request = serverNode.createRequest(req)
           const event = serverNode.createFetchEvent(request)
           let response: Response = await middleware.default(request, event)
@@ -116,7 +118,6 @@ export const plugin = (options: Options = {}): Plugin => {
           publicDir: false,
           build: {
             ssr: true,
-            polyfillDynamicImport: false,
             rollupOptions: {
               input: {
                 index: middlewarePath,
